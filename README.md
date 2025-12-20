@@ -334,10 +334,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👤 Author
 
 **ToobaZahra**
-- GitHub: [@yourusername](https://github.com/ToobaZahra)
-- LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/tooba-zahra-ab2015246)
+- GitHub: [@ToobaZahra](https://github.com/ToobaZahra)
+- LinkedIn: [Tooba Zahra](https://linkedin.com/in/tooba-zahra-ab2015246)
 - Email: tooba.zahra19@gmail.com
-- Portfolio: [Your Website](https://toobazahra.com)
+- Website: [Tooba Zahra](https://toobazahra.com)
 
 ---
 
