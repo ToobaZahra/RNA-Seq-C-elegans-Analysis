@@ -371,7 +371,7 @@ Have questions about this analysis or want to collaborate?
 
 - **Issues:** Use the GitHub issue tracker for bugs or questions
 - **Email:** tooba.zahra19@gmail.com
-- **LinkedIn:** Connect with me for professional networking
+- - **LinkedIn:** https://www.linkedin.com/in/tooba-zahra-ab2015246/
 
 ---
 
