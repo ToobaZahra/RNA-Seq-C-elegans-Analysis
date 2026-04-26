@@ -1,6 +1,6 @@
 # RNA-Seq Differential Expression Analysis: *C. elegans* Sex-Specific Gene Expression
 
-A comprehensive end-to-end RNA-Seq analysis pipeline identifying sex-specific differentially expressed genes in *Caenorhabditis elegans*, demonstrating molecular differences between male and female worms.
+An end-to-end RNA-Seq analysis pipeline to identify sex-specific differentially expressed genes in *Caenorhabditis elegans* — comparing gene expression between male and female worms.
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![R](https://img.shields.io/badge/R-4.0+-green.svg)](https://www.r-project.org/)
@@ -10,14 +10,16 @@ A comprehensive end-to-end RNA-Seq analysis pipeline identifying sex-specific di
 
 ## 🔬 Project Overview
 
-This project investigates the molecular basis of sexual differences in *C. elegans* by comparing gene expression between female and male samples. The analysis reveals genes involved in reproduction, behavior, and development that differ between sexes, providing insights into the genetic mechanisms underlying sexual dimorphism.
+This was a project I did to explore how gene expression differs between male and female *C. elegans* worms using RNA-Seq data. I built the entire pipeline from raw reads to final visualizations — it helped me learn a lot about bioinformatics workflows and statistical analysis.
 
-### Key Findings
-- **Analyzed:** 6 RNA-Seq samples (3 female, 3 male)
+The analysis covers quality control, read alignment, quantification, and differential expression testing using DESeq2.
+
+### Key Facts
+- **Samples:** 6 RNA-Seq samples (3 female, 3 male)
 - **Genome:** *C. elegans* WBcel235 (100 Mb)
 - **Genes analyzed:** 19,985 protein-coding genes
-- **Alignment rate:** 76-84% across all samples
-- **Identified:** Significant sex-specific differentially expressed genes (padj < 0.05, |log2FC| > 2)
+- **Alignment rate:** 76–84% across samples
+- **DEG thresholds used:** padj < 0.05, |log2FC| > 2
 
 ---
 
@@ -64,50 +66,45 @@ RNA-Seq-C-elegans-Analysis/
 │   ├── downregulated.csv                      # Genes higher in females
 │   ├── raw_counts.csv                         # Normalized counts
 │   └── figures/
-│       ├── volcano_plot.png                   # DEG visualization
-│       ├── heatmap.png                        # Expression clustering
-│                  
+│       ├── volcano_plot.png
+│       └── heatmap.png
 ├── environment/
 │   └── R_packages.R                           # R dependencies installer
-├── .gitignore                                 # Git exclusions
+├── .gitignore
 ├── README.md                                  # This file
-├── QUICK_START.md                            # Fast setup guide
-└── LICENSE                                    # MIT License
+├── QUICK_START.md                             # Fast setup guide
+└── LICENSE
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### What You Need
 - Google account (for Colab)
 - R ≥ 4.0 with RStudio (recommended)
 - ~5 GB Google Drive space
 
-### Part 1: Preprocessing (Google Colab - 30 min)
+### Part 1: Preprocessing in Google Colab (~30 min)
 
-1. **Open notebook in Colab:**
-   - Upload `notebooks/rna_seq_analysis_c_elegans_md.ipynb`
-   - Or click: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/)
+1. Upload `notebooks/rna_seq_analysis_c_elegans_md.ipynb` to Colab
+2. Run all cells — it will:
+   - Mount your Google Drive
+   - Install FastQC, fastp, STAR, featureCounts
+   - Download the *C. elegans* genome + 6 FASTQ files
+   - Run QC → Trim → Align → Quantify
+3. Download `count.txt` from the `counts/` output folder
 
-2. **Run all cells:**
-   - Mount Google Drive
-   - Installs: FastQC, fastp, STAR, featureCounts
-   - Downloads: *C. elegans* genome + 6 FASTQ files
-   - Executes: QC → Trim → Align → Quantify
+### Part 2: Differential Expression in R (~5 min)
 
-3. **Download `count.txt`** from `counts/` folder
-
-### Part 2: Differential Expression (R - 5 min)
-
-1. **Setup workspace:**
+1. Set up your working folder:
 ```bash
 mkdir c_elegans_analysis
 cd c_elegans_analysis
 # Place count.txt here
 ```
 
-2. **Create `metadata.tsv`:**
+2. Create `metadata.tsv`:
 ```tsv
 sample	gender
 fm_1	female
@@ -118,21 +115,20 @@ m_5	male
 m_6	male
 ```
 
-3. **Install R packages (first time only):**
+3. Install R packages (only needed once):
 ```r
 source("environment/R_packages.R")
 ```
 
-4. **Run analysis:**
+4. Run the analysis:
 ```r
 setwd("path/to/c_elegans_analysis")
 source("scripts/RNA_seq_c_elegans.R")
 ```
 
-5. **View results:**
-   - Volcano plot displays automatically
-   - Heatmap displays automatically
-   - Files created: `upregulated.csv`, `downregulated.csv`, `raw_counts.csv`
+5. Outputs:
+   - Volcano plot and heatmap open automatically
+   - `upregulated.csv`, `downregulated.csv`, `raw_counts.csv` are saved
 
 ---
 
@@ -142,16 +138,16 @@ source("scripts/RNA_seq_c_elegans.R")
 
 | Sample ID | Condition | Read Count | Aligned | Assignment Rate |
 |-----------|-----------|------------|---------|-----------------|
-| fm_1      | Female    | 49,515     | 45,381  | 83.6%          |
-| fm_2      | Female    | 47,730     | 43,648  | 84.2%          |
-| fm_3      | Female    | 46,495     | 41,497  | 83.7%          |
-| m_4       | Male      | 48,412     | 42,363  | 76.9%          |
-| m_5       | Male      | 47,112     | 41,627  | 77.3%          |
-| m_6       | Male      | 45,263     | 39,653  | 76.3%          |
+| fm_1      | Female    | 49,515     | 45,381  | 83.6%           |
+| fm_2      | Female    | 47,730     | 43,648  | 84.2%           |
+| fm_3      | Female    | 46,495     | 41,497  | 83.7%           |
+| m_4       | Male      | 48,412     | 42,363  | 76.9%           |
+| m_5       | Male      | 47,112     | 41,627  | 77.3%           |
+| m_6       | Male      | 45,263     | 39,653  | 76.3%           |
 
-**Data Source:** [josoga2/bash-course](https://github.com/josoga2/bash-course) RNA-Seq module
+**Data source:** [josoga2/bash-course](https://github.com/josoga2/bash-course) RNA-Seq module
 
-### Reference Data
+### Reference Genome
 - **Organism:** *Caenorhabditis elegans*
 - **Assembly:** WBcel235 (Ensembl)
 - **Annotation:** Ensembl release 114 GFF3
@@ -160,236 +156,228 @@ source("scripts/RNA_seq_c_elegans.R")
 
 ### Quality Metrics
 - **Read length:** 36 bp (single-end)
-- **Quality scores:** Q20 > 95%, Q30 > 90%
-- **Duplication rate:** 3.1-4.1%
+- **Q20:** > 95%, **Q30:** > 90%
+- **Duplication rate:** 3.1–4.1%
 - **Trimming:** Adapter removal + quality filter (Q20)
 
-### Statistical Analysis
-- **Method:** DESeq2 negative binomial model
+### Statistical Method
+- **Package:** DESeq2 (negative binomial model)
 - **Normalization:** Median-of-ratios
 - **Test:** Wald test
-- **Multiple testing:** Benjamini-Hochberg FDR
-- **Significance:** padj < 0.05
-- **Fold change:** |log2FC| > 2 (4-fold)
+- **Multiple testing correction:** Benjamini-Hochberg FDR
+- **Thresholds:** padj < 0.05, |log2FC| > 2
 
 ---
 
-## 🛠️ Tools & Technologies
+## 🛠️ Tools Used
 
-### Preprocessing (Python/Bash in Google Colab)
+### Preprocessing (Google Colab)
 | Tool | Version | Purpose |
 |------|---------|---------|
-| FastQC | 0.11.9 | Quality control assessment |
-| fastp | 0.20.1 | Adapter trimming & QC filtering |
-| STAR | 2.7.10b | Splice-aware alignment |
-| featureCounts | 2.0.3 | Gene-level quantification |
-| samtools | 1.13 | BAM file processing |
+| FastQC | 0.11.9 | Quality control |
+| fastp | 0.20.1 | Adapter trimming |
+| STAR | 2.7.10b | Genome alignment |
+| featureCounts | 2.0.3 | Gene quantification |
+| samtools | 1.13 | BAM processing |
 
-### Analysis (R)
+### Differential Expression (R)
 | Package | Purpose |
 |---------|---------|
-| DESeq2 | Differential expression analysis |
-| pheatmap | Heatmap visualization |
-| Base R | Volcano plots, data manipulation |
+| DESeq2 | Differential expression |
+| pheatmap | Heatmap |
+| Base R | Volcano plot, data handling |
 
 ---
 
 ## 📊 Results & Interpretation
 
-### Volcano Plot
-![Volcano Plot](results/figures/volcano_plot.png)
+### 🔬 Differential Expression Summary
 
-**Interpretation:**
-- **X-axis:** Log2 fold change (male vs female)
-- **Y-axis:** -log10(adjusted p-value)
-- **Red points:** Significantly upregulated in males (log2FC > 2, padj < 0.05)
-- **Blue points:** Significantly downregulated in males / higher in females (log2FC < -2, padj < 0.05)
-- **Gray points:** Not significant
+Using thresholds (padj < 0.05, |log2FC| > 2):
 
-### Heatmap
-![Heatmap](results/figures/heatmap.png)
+| Group | DEG Count |
+|-------|-----------|
+| Upregulated in males | 765 genes |
+| Upregulated in females | 182 genes |
+| **Total DEGs** | **947 genes** |
 
-**Interpretation:**
-- Rows: All differentially expressed genes
-- Columns: 6 samples (3 female, 3 male)
-- Clear clustering separates male from female samples
-- Row-scaled expression shows relative differences
-
-**Quality Check:**
-- Approximately uniform distribution indicates proper statistical testing
-- No evidence of p-value inflation
+> 👉 This shows a strong male-biased transcriptional signature in this dataset.
 
 ---
 
-## 🧬 Biological Significance
+### 📈 Volcano Plot
 
-The identified differentially expressed genes likely represent:
+<p align="center">
+  <img src="results/figures/volcano_plot.png" width="600">
+</p>
 
-- **Sex determination genes:** Core machinery controlling sexual development
-- **Germline genes:** Oogenesis vs spermatogenesis pathways
-- **Reproductive genes:** Sex-specific mating and reproduction functions
-- **Behavioral genes:** Male-specific courtship and mating behaviors
-- **Metabolic genes:** Sexually dimorphic resource allocation
+**Figure 1.** Volcano plot showing differential gene expression between male and female samples.
 
-### Examples of Known Sex-Specific Genes in *C. elegans*
-- **tra-1:** Master regulator of sexual fate
-- **fog-2:** Feminization of germline
-- **her-1:** Male development factor
-- **mab genes:** Male abnormal phenotype genes
-
-*Note: Specific genes from this analysis can be found in `upregulated.csv` and `downregulated.csv`*
+**Interpretation:**
+- Right side → genes upregulated in males
+- Left side → genes upregulated in females
+- Clear spread indicates strong effect sizes (log2FC up to ~6)
+- Significant clustering confirms robust statistical signal
 
 ---
 
-## 🔍 Quality Control
+### 🔥 Expression Heatmap
 
-### Pipeline Validation
+<p align="center">
+  <img src="results/figures/heatmap.png" width="600">
+</p>
+
+**Figure 2.** Heatmap of differentially expressed genes across samples.
+
+**Interpretation:**
+- Samples cluster into distinct male vs female groups
+- Strong consistency across replicates
+- Indicates low technical noise and high biological relevance
+
+---
+
+### 🧬 Top Differentially Expressed Genes
+
+#### ⬆️ Upregulated in Males
+
+| Gene ID | log2FC | padj |
+|---------|--------|------|
+| WBGene00004969 | 6.16 | 2.2e-05 |
+| WBGene00022162 | 4.66 | 0.017 |
+| WBGene00021212 | 4.65 | 0.017 |
+| WBGene00022032 | 4.35 | 0.049 |
+| WBGene00001196 | 2.04 | 0.031 |
+
+#### ⬇️ Upregulated in Females
+
+| Gene ID | log2FC | padj |
+|---------|--------|------|
+| WBGene00003229 | -3.47 | 1.4e-05 |
+| WBGene00021763 | -4.32 | 0.010 |
+| WBGene00021005 | -4.43 | 0.019 |
+| WBGene00020091 | -4.08 | 0.018 |
+| WBGene00003156 | -4.06 | 0.0036 |
+
+---
+
+### 📊 Key Observations
+
+- Strong asymmetry in regulation — many more male-upregulated genes than female
+- High fold changes (up to log2FC ~6) suggest biologically meaningful differences
+- Clear sample clustering by sex confirms the signal is real, not noise
+- No evidence of p-value inflation or batch effects
+
+---
+
+### ✅ Statistical Confidence
+
+- FDR-adjusted p-values control for false positives across thousands of tests
+- DEG patterns are consistent across all three replicates per group
+- Volcano plot distribution shows no inflation or bias
+- Alignment and QC metrics support data reliability
+
+---
+
+### 🧬 Biological Interpretation
+
+Based on these results:
+
+- **Male-specific gene activation** is much more extensive — 765 vs 182 genes
+- Male-upregulated genes likely include:
+  - Spermatogenesis-related genes
+  - Male mating behavior pathways
+- Female-upregulated genes likely relate to:
+  - Oogenesis
+  - Developmental regulation
+
+*Full gene lists are in `upregulated.csv` and `downregulated.csv`*
+
+---
+
+## 🔍 Quality Control Summary
+
 ✅ Pre- and post-trimming FastQC reports generated  
-✅ Alignment statistics verified with STAR logs  
+✅ Alignment rates verified with STAR logs  
 ✅ BAM files validated with samtools  
-✅ P-value distribution checked (no inflation)  
-✅ Biological replicates show consistent patterns  
+✅ P-value distribution checked — no inflation  
+✅ Replicates show consistent expression patterns  
 ✅ Sample clustering matches experimental design  
-
-### Key QC Metrics
-- High alignment rates (76-84%)
-- Low duplication rates (3-4%)
-- Proper p-value distribution
-- Clear sample separation by sex
-- Reproducible results across replicates
 
 ---
 
 ## 💾 Data Availability
 
-**Note:** This repository contains analysis code and key results. Raw sequencing data and large intermediate files are not included to maintain repository efficiency.
+Raw files are not included to keep the repo lightweight, but everything is reproducible by running the pipeline.
 
-### Included
-✅ Complete analysis code (Colab notebook + R script)  
-✅ Gene count matrix (count.txt)  
+### Included in this repo
+✅ Colab preprocessing notebook  
+✅ DESeq2 R script  
+✅ Gene count matrix (`count.txt`)  
 ✅ Sample metadata  
 ✅ Final results (CSV files)  
-✅ Visualizations (PNG images)  
+✅ Figures (PNG)  
 
-### Not Included (Regenerated by Pipeline)
-❌ Raw FASTQ files (36 MB total)  
-❌ BAM alignment files (18 MB)  
+### Not included (auto-generated by pipeline)
+❌ Raw FASTQ files (~36 MB)  
+❌ BAM alignment files (~18 MB)  
 ❌ Genome FASTA (~100 MB)  
-❌ Genome indices (~1 GB)  
-
-### To Reproduce
-All excluded files are automatically downloaded and generated by running the pipeline:
-1. Colab notebook downloads raw FASTQ files
-2. Colab notebook downloads *C. elegans* genome
-3. Pipeline generates all intermediate files
-4. count.txt provided as starting point for R analysis
+❌ STAR genome indices (~1 GB)  
 
 ---
 
-## 🎓 Skills Demonstrated
+## 🎓 What I Learned
 
-### Technical Skills
-- RNA-Seq data analysis
-- Bioinformatics pipeline development
-- Statistical analysis (hypothesis testing, FDR correction)
-- Data visualization
-- Cloud computing (Google Colab)
-- Version control (Git/GitHub)
-- Programming: Python, R, Bash
-- Documentation
-
-### Bioinformatics Tools
-- Sequence QC and preprocessing
-- Genome alignment
-- Gene quantification
-- Differential expression analysis
-- Data normalization
-- Multiple testing correction
-
-### Soft Skills
-- Project planning and execution
-- Problem-solving
-- Scientific communication
-- Attention to detail
-- Independent learning
+Working on this project taught me:
+- How to set up and run a full RNA-Seq pipeline
+- Using STAR for splice-aware alignment and DESeq2 for statistical testing
+- How FDR correction works in practice (and why it matters)
+- Interpreting volcano plots and heatmaps biologically
+- Managing a bioinformatics project with proper folder structure and documentation
+- Running computationally heavy tasks on Google Colab
 
 ---
 
 ## 🤝 Contributing
 
-This is a portfolio project, but feedback is welcome!
-
-- **Found a bug?** Open an issue
-- **Have suggestions?** Open an issue or pull request
-- **Want to adapt this?** Fork the repository!
+This is a personal portfolio project, but if you spot a mistake or have suggestions, feel free to open an issue or pull request!
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Licensed under the MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-## 👤 Author
+## 👤 About Me
 
-**ToobaZahra**
+**Tooba Zahra** — Bioinformatics graduate passionate about combining biology with code.
+
 - GitHub: [@ToobaZahra](https://github.com/ToobaZahra)
 - LinkedIn: [Tooba Zahra](https://linkedin.com/in/tooba-zahra-ab2015246)
 - Email: tooba.zahra19@gmail.com
-- Website: [Tooba Zahra](https://toobazahra.com)
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **Data source:** [josoga2/bash-course](https://github.com/josoga2/bash-course) - RNA-Seq training module
+- **Data:** [josoga2/bash-course](https://github.com/josoga2/bash-course) RNA-Seq training module
 - **Reference genome:** Ensembl Metazoa (WBcel235)
-- **DESeq2 developers:** Love, Huber, Anders
-- **Bioconductor community:** Open-source bioinformatics tools
-- **Google Colab:** Free cloud computing platform
+- **DESeq2:** Love, Huber & Anders (2014)
+- **Google Colab** for free GPU/CPU access
 
 ---
 
 ## 📚 References
 
-1. **Love MI, Huber W, Anders S** (2014). "Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2." *Genome Biology*, 15:550. [DOI: 10.1186/s13059-014-0550-8](https://doi.org/10.1186/s13059-014-0550-8)
-
-2. **Dobin A, Davis CA, Schlesinger F, et al.** (2013). "STAR: ultrafast universal RNA-seq aligner." *Bioinformatics*, 29(1):15-21. [DOI: 10.1093/bioinformatics/bts635](https://doi.org/10.1093/bioinformatics/bts635)
-
-3. **Liao Y, Smyth GK, Shi W** (2014). "featureCounts: an efficient general purpose program for assigning sequence reads to genomic features." *Bioinformatics*, 30(7):923-930. [DOI: 10.1093/bioinformatics/btt656](https://doi.org/10.1093/bioinformatics/btt656)
-
-4. **Chen S, Zhou Y, Chen Y, Gu J** (2018). "fastp: an ultra-fast all-in-one FASTQ preprocessor." *Bioinformatics*, 34(17):i884-i890. [DOI: 10.1093/bioinformatics/bty560](https://doi.org/10.1093/bioinformatics/bty560)
-
-5. **WormBase** - *C. elegans* genomic resources. [https://wormbase.org](https://wormbase.org)
+1. Love MI, Huber W, Anders S (2014). DESeq2. *Genome Biology*, 15:550. [DOI](https://doi.org/10.1186/s13059-014-0550-8)
+2. Dobin A et al. (2013). STAR aligner. *Bioinformatics*, 29(1):15–21. [DOI](https://doi.org/10.1093/bioinformatics/bts635)
+3. Liao Y, Smyth GK, Shi W (2014). featureCounts. *Bioinformatics*, 30(7):923–930. [DOI](https://doi.org/10.1093/bioinformatics/btt656)
+4. Chen S et al. (2018). fastp. *Bioinformatics*, 34(17):i884–i890. [DOI](https://doi.org/10.1093/bioinformatics/bty560)
+5. WormBase: https://wormbase.org
 
 ---
 
-## 📞 Contact
-
-Have questions about this analysis or want to collaborate?
-
-- **Issues:** Use the GitHub issue tracker for bugs or questions
-- **Email:** tooba.zahra19@gmail.com
-- - **LinkedIn:** https://www.linkedin.com/in/tooba-zahra-ab2015246/
-
----
-
-## 🌟 If You Found This Useful
-
-If this project helped you learn RNA-Seq analysis or served as inspiration for your own work:
-- ⭐ Star this repository
-- 🔗 Share it with others
-- 💬 Let me know how you used it!
-
----
-
-**Project Status:** ✅ Complete and documented
-
-**Last Updated:** December 2025
-
-**Keywords:** RNA-Seq, Differential Expression, DESeq2, Bioinformatics, C. elegans, Python, R, STAR, Genomics, Computational Biology, Sex-specific genes
-
--
-
-*This project demonstrates a complete bioinformatics workflow suitable for portfolio presentation and serves as a learning resource for RNA-Seq analysis.*
+**Status:** ✅ Complete  
+**Last updated:** April 2026  
+**Keywords:** RNA-Seq · DESeq2 · Bioinformatics · C. elegans · Differential Expression · Python · R · Genomics
